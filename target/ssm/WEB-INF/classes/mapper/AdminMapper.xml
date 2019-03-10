@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soecode.lyf.mapper.AdminMapper">
+    <resultMap id="BaseResultMap" type="com.soecode.lyf.entity.Admin">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="adminName" property="adminName" jdbcType="VARCHAR"/>
+        <result column="adminNumber" property="adminNumber" jdbcType="VARCHAR"/>
+        <result column="adminIphone" property="adminIphone" jdbcType="VARCHAR"/>
+        <result column="adminStatus" property="adminStatus" jdbcType="INTEGER"/>
+        <result column="createData" property="createData" jdbcType="VARCHAR"/>
+        <result column="createBy" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updateData" property="updateData" jdbcType="VARCHAR"/>
+        <result column="updateBy" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="token" property="token" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, adminName,token, adminNumber, adminIphone, adminStatus, createData, createBy, updateData,
+    updateBy
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from admin
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from admin
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.soecode.lyf.entity.Admin">
+    insert into admin (id, adminName, adminNumber, 
+      adminIphone, adminStatus, createData, 
+      createBy, updateBate, updateBy
+      )
+    values (#{id,jdbcType=INTEGER}, #{adminName,jdbcType=VARCHAR}, #{adminNumber,jdbcType=VARCHAR}, 
+      #{adminIphone,jdbcType=VARCHAR}, #{adminStatus,jdbcType=INTEGER}, #{createData,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{updateBate,jdbcType=VARCHAR}, #{updateBy,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.soecode.lyf.entity.Admin">
+        insert into admin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="adminName != null">
+                adminName,
+            </if>
+            <if test="adminNumber != null">
+                adminNumber,
+            </if>
+            <if test="adminIphone != null">
+                adminIphone,
+            </if>
+            <if test="adminStatus != null">
+                adminStatus,
+            </if>
+            <if test="createData != null">
+                createData,
+            </if>
+            <if test="createBy != null">
+                createBy,
+            </if>
+            <if test="updateBate != null">
+                updateBate,
+            </if>
+            <if test="updateBy != null">
+                updateBy,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="adminName != null">
+                #{adminName,jdbcType=VARCHAR},
+            </if>
+            <if test="adminNumber != null">
+                #{adminNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="adminIphone != null">
+                #{adminIphone,jdbcType=VARCHAR},
+            </if>
+            <if test="adminStatus != null">
+                #{adminStatus,jdbcType=INTEGER},
+            </if>
+            <if test="createData != null">
+                #{createData,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBate != null">
+                #{updateBate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.soecode.lyf.entity.Admin">
+        update admin
+        <set>
+            <if test="adminName != null">
+                adminName = #{adminName,jdbcType=VARCHAR},
+            </if>
+            <if test="adminNumber != null">
+                adminNumber = #{adminNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="adminIphone != null">
+                adminIphone = #{adminIphone,jdbcType=VARCHAR},
+            </if>
+            <if test="adminStatus != null">
+                adminStatus = #{adminStatus,jdbcType=INTEGER},
+            </if>
+            <if test="createData != null">
+                createData = #{createData,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                createBy = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBate != null">
+                updateBate = #{updateBate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBy != null">
+                updateBy = #{updateBy,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.soecode.lyf.entity.Admin">
+    update admin
+    set adminName = #{adminName,jdbcType=VARCHAR},
+      adminNumber = #{adminNumber,jdbcType=VARCHAR},
+      adminIphone = #{adminIphone,jdbcType=VARCHAR},
+      adminStatus = #{adminStatus,jdbcType=INTEGER},
+      createData = #{createData,jdbcType=VARCHAR},
+      createBy = #{createBy,jdbcType=VARCHAR},
+      updateData = #{updateData,jdbcType=VARCHAR},
+      updateBy = #{updateBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--通过用户名和密码查询-->
+    <select id="selectByLogin" resultType="com.soecode.lyf.entity.Admin" parameterType="com.soecode.lyf.entity.Admin">
+        select
+        id,adminName,adminIphone, adminStatus
+        from admin
+        where
+        adminNumber = #{adminNumber,jdbcType=VARCHAR}
+        AND adminStatus = #{adminStatus,jdbcType=INTEGER}
+        <if test="adminName != null and adminName != '' ">
+            AND adminName = #{adminName,jdbcType=VARCHAR}
+        </if>
+        <if test="adminIphone != null and adminIphone != '' ">
+            OR adminIphone = #{adminIphone,jdbcType=VARCHAR}
+        </if>
+        AND adminStatus = #{adminStatus,jdbcType=INTEGER}
+    </select>
+
+    <!--查询全部管理员的信息和角色信息-->
+    <select id="selectAllAdmin" resultType="map" parameterType="java.lang.Integer">
+    select
+     id, adminName, adminIphone, adminStatus, createData, createBy, updateData, updateBy
+    from admin
+  </select>
+
+    <!--查询所有管理员信息和角色id-->
+    <select id="selectAllAdminAndRole" resultType="java.util.Map" parameterType="java.util.Map">
+        select
+        t1.id,
+        t1.adminName,
+        t1.adminIphone,
+        t1.adminStatus,
+        t2.roleId
+        from admin t1
+        LEFT JOIN admin_role t2 ON t1.id = t2.adminId AND t1.id in
+        <foreach collection="adminList" index="index" item="item" open="(" close=")" separator=",">
+            #{item.id}
+        </foreach>
+    </select>
+
+    <!--通过管理员id，查询管理员的信息和管理员角色id-->
+    <select id="selectRoleAdminById" resultType="map" parameterType="com.soecode.lyf.entity.Admin">
+    select
+    t1.id,
+    t1.adminName,
+    t1.adminIphone,
+    t1.adminStatus,
+    t1.adminNumber,
+    t2.roleId
+    from admin t1
+    LEFT JOIN admin_role t2 ON t1.id = t2.adminId AND t2.adminId=#{id}
+    WHERE
+    t1.adminStatus = #{adminStatus,jdbcType=INTEGER}
+    AND t1.id = #{id,jdbcType=INTEGER}
+  </select>
+
+    <!--删除管理员，修改管理员状态-->
+    <update id="deleteAdmin" parameterType="com.soecode.lyf.entity.Admin">
+    update admin
+    set
+      adminStatus = #{adminStatus,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--增加管理员-->
+    <insert id="insertAdmin" parameterType="com.soecode.lyf.entity.params.AdminParams">
+    insert into admin (adminName, adminNumber,
+      adminIphone, adminStatus, createData,
+      createBy
+      )
+    values (#{adminName,jdbcType=VARCHAR}, #{adminNumber,jdbcType=VARCHAR},
+      #{adminIphone,jdbcType=VARCHAR}, #{adminStatus,jdbcType=INTEGER}, #{createData,jdbcType=VARCHAR},
+      #{createBy,jdbcType=VARCHAR}
+      )
+  </insert>
+
+    <!--查重-->
+    <select id="selectRepeat" resultType="int" parameterType="com.soecode.lyf.entity.Admin">
+        select count(1)
+        from admin
+        where
+        <if test="adminName != '' and adminName != null">
+            adminName = #{adminName,jdbcType=VARCHAR}
+        </if>
+        <if test="adminIphone != '' and adminIphone != null">
+            adminIphone = #{adminIphone,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <!--查询单个管理员信息-->
+    <select id="selectOneById" resultType="com.soecode.lyf.entity.Admin" parameterType="com.soecode.lyf.entity.Admin">
+        select
+        <include refid="Base_Column_List"/>
+        from admin
+        where id = #{id,jdbcType=INTEGER}
+        and adminStatus = #{adminStatus,jdbcType=INTEGER}
+    </select>
+
+    <!--修改单个管理员信息-->
+    <update id="updateOneAdmin" parameterType="com.soecode.lyf.entity.Admin">
+    update admin
+    set
+      adminNumber = #{adminNumber,jdbcType=VARCHAR},
+      adminIphone = #{adminIphone,jdbcType=VARCHAR},
+      updateData = #{updateData,jdbcType=VARCHAR},
+      updateBy = #{updateBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--修改单个管理员信息-->
+    <update id="updateAdmin" parameterType="com.soecode.lyf.entity.params.AdminParams">
+    update admin
+    set
+    adminStatus = #{adminStatus,jdbcType=INTEGER},
+      adminName = #{adminName,jdbcType=VARCHAR},
+      adminIphone = #{adminIphone,jdbcType=VARCHAR},
+      updateData = #{updateData,jdbcType=VARCHAR},
+      updateBy = #{updateBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--把token存入用户-->
+    <update id="setToken" parameterType="com.soecode.lyf.entity.params.AdminParams">
+    update admin
+    set token = #{token,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--通过token查询用户-->
+    <select id="selectAdminByToken" parameterType="String" resultType="com.soecode.lyf.entity.params.AdminParams">
+        select
+        <include refid="Base_Column_List"/>
+        from admin
+        where token = #{token,jdbcType=VARCHAR}
+    </select>
+
+
+</mapper>

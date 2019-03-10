@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soecode.lyf.mapper.CommodityMapper">
+    <resultMap id="BaseResultMap" type="com.soecode.lyf.entity.Commodity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="commodityName" property="commodityName" jdbcType="VARCHAR"/>
+        <result column="commodityPrice" property="commodityPrice" jdbcType="INTEGER"/>
+        <result column="commodityAddress" property="commodityAddress" jdbcType="VARCHAR"/>
+        <result column="commodityCost" property="commodityCost" jdbcType="DECIMAL"/>
+        <result column="typeId" property="typeId" jdbcType="INTEGER"/>
+        <result column="userIphone" property="userIphone" jdbcType="VARCHAR"/>
+        <result column="userQq" property="userQq" jdbcType="VARCHAR"/>
+        <result column="commodityStatus" property="commodityStatus" jdbcType="INTEGER"/>
+        <result column="createData" property="createData" jdbcType="VARCHAR"/>
+        <result column="createBy" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updateBate" property="updateBate" jdbcType="VARCHAR"/>
+        <result column="updateBy" property="updateBy" jdbcType="VARCHAR"/>
+        <result column="commodityPhoto" property="commodityPhoto" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, commodityName, commodityPrice, commodityAddress, commodityCost, typeId, userIphone, 
+    userQq, commodityStatus, createData, createBy, updateBate, updateBy,commodityDescribe
+  </sql>
+    <!--<sql id="Blob_Column_List">-->
+    <!--commodityPhoto, commodityDescribe-->
+  <!--</sql>-->
+    <select id="selectByPrimaryKey" resultType="com.soecode.lyf.entity.Commodity" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from commodity
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from commodity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <!--<insert id="insert" parameterType="com.soecode.lyf.entity.CommodityWithBLOBs">-->
+    <!--insert into commodity (id, commodityName, commodityPrice, -->
+      <!--commodityAddress, commodityCost, typeId, -->
+      <!--userIphone, userQq, commodityStatus, -->
+      <!--createData, createBy, updateBate, -->
+      <!--updateBy, commodityPhoto, commodityDescribe-->
+      <!--)-->
+    <!--values (#{id,jdbcType=INTEGER}, #{commodityName,jdbcType=VARCHAR}, #{commodityPrice,jdbcType=INTEGER}, -->
+      <!--#{commodityAddress,jdbcType=VARCHAR}, #{commodityCost,jdbcType=DECIMAL}, #{typeId,jdbcType=INTEGER}, -->
+      <!--#{userIphone,jdbcType=VARCHAR}, #{userQq,jdbcType=VARCHAR}, #{commodityStatus,jdbcType=INTEGER}, -->
+      <!--#{createData,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{updateBate,jdbcType=VARCHAR}, -->
+      <!--#{updateBy,jdbcType=VARCHAR}, #{commodityPhoto,jdbcType=LONGVARBINARY}, #{commodityDescribe,jdbcType=LONGVARCHAR}-->
+      <!--)-->
+  <!--</insert>-->
+    <!--<insert id="insertSelective" parameterType="com.soecode.lyf.entity.CommodityWithBLOBs">-->
+        <!--insert into commodity-->
+        <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+            <!--<if test="id != null">-->
+                <!--id,-->
+            <!--</if>-->
+            <!--<if test="commodityName != null">-->
+                <!--commodityName,-->
+            <!--</if>-->
+            <!--<if test="commodityPrice != null">-->
+                <!--commodityPrice,-->
+            <!--</if>-->
+            <!--<if test="commodityAddress != null">-->
+                <!--commodityAddress,-->
+            <!--</if>-->
+            <!--<if test="commodityCost != null">-->
+                <!--commodityCost,-->
+            <!--</if>-->
+            <!--<if test="typeId != null">-->
+                <!--typeId,-->
+            <!--</if>-->
+            <!--<if test="userIphone != null">-->
+                <!--userIphone,-->
+            <!--</if>-->
+            <!--<if test="userQq != null">-->
+                <!--userQq,-->
+            <!--</if>-->
+            <!--<if test="commodityStatus != null">-->
+                <!--commodityStatus,-->
+            <!--</if>-->
+            <!--<if test="createData != null">-->
+                <!--createData,-->
+            <!--</if>-->
+            <!--<if test="createBy != null">-->
+                <!--createBy,-->
+            <!--</if>-->
+            <!--<if test="updateBate != null">-->
+                <!--updateBate,-->
+            <!--</if>-->
+            <!--<if test="updateBy != null">-->
+                <!--updateBy,-->
+            <!--</if>-->
+            <!--<if test="commodityPhoto != null">-->
+                <!--commodityPhoto,-->
+            <!--</if>-->
+            <!--<if test="commodityDescribe != null">-->
+                <!--commodityDescribe,-->
+            <!--</if>-->
+        <!--</trim>-->
+        <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+            <!--<if test="id != null">-->
+                <!--#{id,jdbcType=INTEGER},-->
+            <!--</if>-->
+            <!--<if test="commodityName != null">-->
+                <!--#{commodityName,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="commodityPrice != null">-->
+                <!--#{commodityPrice,jdbcType=INTEGER},-->
+            <!--</if>-->
+            <!--<if test="commodityAddress != null">-->
+                <!--#{commodityAddress,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="commodityCost != null">-->
+                <!--#{commodityCost,jdbcType=DECIMAL},-->
+            <!--</if>-->
+            <!--<if test="typeId != null">-->
+                <!--#{typeId,jdbcType=INTEGER},-->
+            <!--</if>-->
+            <!--<if test="userIphone != null">-->
+                <!--#{userIphone,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="userQq != null">-->
+                <!--#{userQq,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="commodityStatus != null">-->
+                <!--#{commodityStatus,jdbcType=INTEGER},-->
+            <!--</if>-->
+            <!--<if test="createData != null">-->
+                <!--#{createData,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="createBy != null">-->
+                <!--#{createBy,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="updateBate != null">-->
+                <!--#{updateBate,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="updateBy != null">-->
+                <!--#{updateBy,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="commodityPhoto != null">-->
+                <!--#{commodityPhoto,jdbcType=LONGVARBINARY},-->
+            <!--</if>-->
+            <!--<if test="commodityDescribe != null">-->
+                <!--#{commodityDescribe,jdbcType=LONGVARCHAR},-->
+            <!--</if>-->
+        <!--</trim>-->
+    <!--</insert>-->
+    <!--<update id="updateByPrimaryKeySelective" parameterType="com.soecode.lyf.entity.CommodityWithBLOBs">-->
+        <!--update commodity-->
+        <!--<set>-->
+            <!--<if test="commodityName != null">-->
+                <!--commodityName = #{commodityName,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="commodityPrice != null">-->
+                <!--commodityPrice = #{commodityPrice,jdbcType=INTEGER},-->
+            <!--</if>-->
+            <!--<if test="commodityAddress != null">-->
+                <!--commodityAddress = #{commodityAddress,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="commodityCost != null">-->
+                <!--commodityCost = #{commodityCost,jdbcType=DECIMAL},-->
+            <!--</if>-->
+            <!--<if test="typeId != null">-->
+                <!--typeId = #{typeId,jdbcType=INTEGER},-->
+            <!--</if>-->
+            <!--<if test="userIphone != null">-->
+                <!--userIphone = #{userIphone,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="userQq != null">-->
+                <!--userQq = #{userQq,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="commodityStatus != null">-->
+                <!--commodityStatus = #{commodityStatus,jdbcType=INTEGER},-->
+            <!--</if>-->
+            <!--<if test="createData != null">-->
+                <!--createData = #{createData,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="createBy != null">-->
+                <!--createBy = #{createBy,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="updateBate != null">-->
+                <!--updateBate = #{updateBate,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="updateBy != null">-->
+                <!--updateBy = #{updateBy,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="commodityPhoto != null">-->
+                <!--commodityPhoto = #{commodityPhoto,jdbcType=LONGVARBINARY},-->
+            <!--</if>-->
+            <!--<if test="commodityDescribe != null">-->
+                <!--commodityDescribe = #{commodityDescribe,jdbcType=LONGVARCHAR},-->
+            <!--</if>-->
+        <!--</set>-->
+        <!--where id = #{id,jdbcType=INTEGER}-->
+    <!--</update>-->
+    <!--<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.soecode.lyf.entity.CommodityWithBLOBs">-->
+    <!--update commodity-->
+    <!--set commodityName = #{commodityName,jdbcType=VARCHAR},-->
+      <!--commodityPrice = #{commodityPrice,jdbcType=INTEGER},-->
+      <!--commodityAddress = #{commodityAddress,jdbcType=VARCHAR},-->
+      <!--commodityCost = #{commodityCost,jdbcType=DECIMAL},-->
+      <!--typeId = #{typeId,jdbcType=INTEGER},-->
+      <!--userIphone = #{userIphone,jdbcType=VARCHAR},-->
+      <!--userQq = #{userQq,jdbcType=VARCHAR},-->
+      <!--commodityStatus = #{commodityStatus,jdbcType=INTEGER},-->
+      <!--createData = #{createData,jdbcType=VARCHAR},-->
+      <!--createBy = #{createBy,jdbcType=VARCHAR},-->
+      <!--updateBate = #{updateBate,jdbcType=VARCHAR},-->
+      <!--updateBy = #{updateBy,jdbcType=VARCHAR},-->
+      <!--commodityPhoto = #{commodityPhoto,jdbcType=LONGVARBINARY},-->
+      <!--commodityDescribe = #{commodityDescribe,jdbcType=LONGVARCHAR}-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</update>-->
+    <update id="updateByPrimaryKey" parameterType="com.soecode.lyf.entity.Commodity">
+    update commodity
+    set commodityName = #{commodityName,jdbcType=VARCHAR},
+      commodityPrice = #{commodityPrice,jdbcType=INTEGER},
+      commodityAddress = #{commodityAddress,jdbcType=VARCHAR},
+      commodityCost = #{commodityCost,jdbcType=DECIMAL},
+      typeId = #{typeId,jdbcType=INTEGER},
+      userIphone = #{userIphone,jdbcType=VARCHAR},
+      userQq = #{userQq,jdbcType=VARCHAR},
+      commodityStatus = #{commodityStatus,jdbcType=INTEGER},
+      createData = #{createData,jdbcType=VARCHAR},
+      createBy = #{createBy,jdbcType=VARCHAR},
+      updateBate = #{updateBate,jdbcType=VARCHAR},
+      updateBy = #{updateBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--后台查询商品和用户信息-->
+    <select id="selectAllCommodity" resultType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from commodity
+    </select>
+
+    <!--删除商品和用户信息-->
+    <update id="deleteCommodity" parameterType="com.soecode.lyf.entity.Commodity">
+     update commodity
+    set
+      commodityStatus = #{commodityStatus,jdbcType=INTEGER},
+      updateBate = #{updateBate,jdbcType=VARCHAR},
+      updateBy = #{updateBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--取得记录总数-->
+    <select id="getCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    SELECT
+    count(1) as count
+      from commodity
+  </select>
+
+    <!--查询所有用户(分页)-->
+    <select id="findByPage" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from commodity
+        <if test="pageIndex >= 0 and pageSize > 0">
+            limit #{pageIndex},#{pageSize}
+        </if>
+    </select>
+
+    <select id="selectCommodityList" parameterType="java.lang.String" resultType="java.util.Map">
+      SELECT
+     t1.id, t1.commodityName, t1.commodityPrice, t1.commodityAddress,
+      t1.commodityCost, t1.typeId, t1.userIphone,
+      t1.userQq, t1.commodityStatus, t1.createData, t1.createBy,
+      t1.updateBate, t1.updateBy,t1.commodityDescribe,t1.commodityPhoto
+      FROM commodity t1
+    where ${where}
+  </select>
+
+    <insert id="insertCommodity" parameterType="com.soecode.lyf.entity.Commodity">
+        insert into commodity (commodityName, commodityPrice,
+      commodityAddress, commodityCost, typeId,
+      userIphone, userQq, commodityStatus,
+      createData, createBy, updateBate,
+      updateBy, commodityPhoto, commodityDescribe
+      )
+    values ( #{commodityName,jdbcType=VARCHAR}, #{commodityPrice,jdbcType=INTEGER},
+      #{commodityAddress,jdbcType=VARCHAR}, #{commodityCost,jdbcType=DECIMAL}, #{typeId,jdbcType=INTEGER},
+      #{userIphone,jdbcType=VARCHAR}, #{userQq,jdbcType=VARCHAR}, #{commodityStatus,jdbcType=INTEGER},
+      #{createData,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{updateBate,jdbcType=VARCHAR},
+      #{updateBy,jdbcType=VARCHAR}, #{commodityPhoto,jdbcType=LONGVARBINARY}, #{commodityDescribe,jdbcType=LONGVARCHAR}
+      )
+    </insert>
+
+    <select id="selectLoveByList" parameterType="java.util.Map" resultType="java.util.Map">
+        select id,
+        commodityName, commodityPrice,
+        commodityAddress, commodityCost, typeId,
+        userIphone, userQq, commodityStatus,
+        createData, createBy, updateBate,
+        updateBy, commodityPhoto, commodityDescribe
+        from commodity
+        where id in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{item.id}
+        </foreach>
+    </select>
+</mapper>

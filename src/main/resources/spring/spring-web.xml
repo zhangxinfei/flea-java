@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-4.3.xsd
+http://www.springframework.org/schema/mvc
+http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<!-- 配置SpringMVC -->
+	<!-- 1.开启SpringMVC注解模式 -->
+	<!-- 简化配置： 
+		(1)自动注册DefaultAnootationHandlerMapping,AnotationMethodHandlerAdapter 
+		(2)提供一些列：数据绑定，数字和日期的format @NumberFormat, @DateTimeFormat, xml,json默认读写支持 
+	-->
+	<mvc:annotation-driven />
+	
+	<!-- 2.静态资源默认servlet配置
+		(1)加入对静态资源的处理：js,gif,png
+		(2)允许使用"/"做整体映射
+	 -->
+	 <mvc:default-servlet-handler/>
+	 
+	 <!-- 3.配置jsp 显示ViewResolver -->
+	 <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	 	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+	 	<property name="prefix" value="/WEB-INF/jsp/" />
+	 	<property name="suffix" value=".jsp" />
+	 </bean>
+	 
+	 <!-- 4.扫描web相关的bean -->
+	 <context:component-scan base-package="com.soecode.lyf.controller" />
+	<!--开启注解，否则注解会不起作用-->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<!--5.配置Redis-->
+	<context:component-scan base-package="com.soecode.lyf.util.redis" >
+	</context:component-scan>
+
+	<!--配置responsebody返回值乱码-->
+	<mvc:annotation-driven>
+		<!-- 消息转换器,解决responseBody返回中外乱码问题 -->
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes" value="text/plain;charset=UTF-8" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!--自定义消息转换器的编码,解决后台传输json回前台时，中文乱码问题-->
+	<mvc:annotation-driven >
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter" >
+				<property name = "supportedMediaTypes">
+					<list>
+						<value>application/json;charset=utf-8</value>
+						<value>text/html;charset=utf-8</value>
+						<!-- application 可以在任意 form 表单里面 enctype 属性默认找到 -->
+						<value>application/x-www-form-urlencoded</value>
+					</list>
+				</property>
+			</bean>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" ></bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+	<bean id="mappingJacksonHttpMessageConverter"
+		  class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 解决ajax返回string乱码,需要在annotation-driven之前 -->
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<bean class="org.springframework.http.MediaType">
+								<constructor-arg value="text" />
+								<constructor-arg value="plain" />
+								<constructor-arg value="UTF-8" />
+							</bean>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	 <!--拦截器-->
+	<mvc:interceptors>
+	<!-- 多个拦截器，顺序执行 说明： 1 mvc:mapping 拦截器路径配置 ; 2 mvc:exclude-mapping 拦截器不需要拦截的路径-->
+	<mvc:interceptor>
+	<!--拦截的路径-->
+	<!--<mvc:mapping path="/Commodity/Customer/**" />-->
+	<mvc:mapping path="/Commodity/Customer/**" />
+	<mvc:mapping path="/Shopping/**" />
+	<mvc:mapping path="/CommodityType/Customer/**"/>
+	<!--&lt;!&ndash;不拦截的路径&ndash;&gt;-->
+	<mvc:exclude-mapping path="/Commodity/**"/>
+	<mvc:exclude-mapping path="/admin/**" />
+	<mvc:exclude-mapping path="/CommodityType/**" />
+	<mvc:exclude-mapping path="/Permission/**" />
+	<mvc:exclude-mapping path="/Role/**" />
+	<mvc:exclude-mapping path="/user/**" />
+	<bean class="com.soecode.lyf.util.aop.config.LoginInterceptor"></bean>
+	</mvc:interceptor>
+	</mvc:interceptors>
+
+	<!--权限过滤器-->
+	<!--<mvc:interceptors>-->
+		<!--<bean class="com.soecode.lyf.util.Handle.AuthorityAnnotationInterceptor"></bean>-->
+	<!--</mvc:interceptors>-->
+	<!--&lt;!&ndash;拦截器&ndash;&gt;-->
+	<!--<mvc:interceptors>-->
+		<!--<bean class="com.soecode.lyf.util.auth.SessionFilter"/>-->
+		<!--<mvc:interceptor>-->
+			<!--<mvc:mapping path=""/>-->
+
+		<!--</mvc:interceptor>-->
+	<!--</mvc:interceptors>-->
+
+	<!--接口-->
+	<!--<mvc:cors>-->
+		<!--<mvc:mapping path="/**"-->
+		<!--allowed-origins="*"-->
+		<!--allowed-methods="POST, GET, OPTIONS, DELETE, PUT"-->
+		<!--allowed-headers="Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"-->
+		<!--allow-credentials="true" />-->
+	<!--</mvc:cors>-->
+</beans>

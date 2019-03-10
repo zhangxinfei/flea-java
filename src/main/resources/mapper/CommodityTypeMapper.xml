@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soecode.lyf.mapper.CommodityTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.soecode.lyf.entity.CommodityType" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="typeName" property="typeName" jdbcType="VARCHAR" />
+    <result column="typeFatherId" property="typeFatherId" jdbcType="INTEGER" />
+    <result column="typeStatus" property="typeStatus" jdbcType="INTEGER" />
+    <result column="createData" property="createData" jdbcType="VARCHAR" />
+    <result column="createBy" property="createBy" jdbcType="VARCHAR" />
+    <result column="updateBate" property="updateBate" jdbcType="VARCHAR" />
+    <result column="updateBy" property="updateBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, typeName, typeFatherId, typeStatus, createData, createBy, updateBate, updateBy
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from commodity_type
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from commodity_type
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.soecode.lyf.entity.CommodityType" >
+    insert into commodity_type (id, typeName, typeFatherId, 
+      typeStatus, createData, createBy, 
+      updateBate, updateBy)
+    values (#{id,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR}, #{typeFatherId,jdbcType=INTEGER}, 
+      #{typeStatus,jdbcType=INTEGER}, #{createData,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{updateBate,jdbcType=VARCHAR}, #{updateBy,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soecode.lyf.entity.CommodityType" >
+    insert into commodity_type
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="typeName != null" >
+        typeName,
+      </if>
+      <if test="typeFatherId != null" >
+        typeFatherId,
+      </if>
+      <if test="typeStatus != null" >
+        typeStatus,
+      </if>
+      <if test="createData != null" >
+        createData,
+      </if>
+      <if test="createBy != null" >
+        createBy,
+      </if>
+      <if test="updateBate != null" >
+        updateBate,
+      </if>
+      <if test="updateBy != null" >
+        updateBy,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeFatherId != null" >
+        #{typeFatherId,jdbcType=INTEGER},
+      </if>
+      <if test="typeStatus != null" >
+        #{typeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createData != null" >
+        #{createData,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBate != null" >
+        #{updateBate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soecode.lyf.entity.CommodityType" >
+    update commodity_type
+    <set >
+      <if test="typeName != null" >
+        typeName = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeFatherId != null" >
+        typeFatherId = #{typeFatherId,jdbcType=INTEGER},
+      </if>
+      <if test="typeStatus != null" >
+        typeStatus = #{typeStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createData != null" >
+        createData = #{createData,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        createBy = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBate != null" >
+        updateBate = #{updateBate,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null" >
+        updateBy = #{updateBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soecode.lyf.entity.CommodityType" >
+    update commodity_type
+    set typeName = #{typeName,jdbcType=VARCHAR},
+      typeFatherId = #{typeFatherId,jdbcType=INTEGER},
+      typeStatus = #{typeStatus,jdbcType=INTEGER},
+      createData = #{createData,jdbcType=VARCHAR},
+      createBy = #{createBy,jdbcType=VARCHAR},
+      updateBate = #{updateBate,jdbcType=VARCHAR},
+      updateBy = #{updateBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--查询全部商品信息-->
+  <select id="selectAllType" resultType="map">
+    select
+    <include refid="Base_Column_List" />
+    from  commodity_type
+  </select>
+
+  <!--删除商品分类-->
+  <update id="deleteCommodityType" parameterType="com.soecode.lyf.entity.CommodityType">
+    update commodity_type
+    set typeStatus = #{typeStatus,jdbcType=INTEGER}
+    where id =#{id,jdbcType=INTEGER}
+  </update>
+
+  <!--新增商品分类-->
+  <insert id="insertCommodityType" parameterType="com.soecode.lyf.entity.CommodityType">
+    insert into commodity_type (typeName, typeFatherId,
+      typeStatus, createData, createBy)
+    values (#{typeName,jdbcType=VARCHAR}, #{typeFatherId,jdbcType=INTEGER},
+      #{typeStatus,jdbcType=INTEGER}, #{createData,jdbcType=VARCHAR},
+       #{createBy,jdbcType=VARCHAR})
+  </insert>
+
+  <!--修改商品分类-->
+  <update id="updateCommodityType" parameterType="com.soecode.lyf.entity.CommodityType">
+    update commodity_type
+    set typeName = #{typeName,jdbcType=VARCHAR},
+      typeFatherId = #{typeFatherId,jdbcType=INTEGER},
+      typeStatus = #{typeStatus,jdbcType=INTEGER},
+      updateBate = #{updateBate,jdbcType=VARCHAR},
+      updateBy = #{updateBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--查询全部商品的名称-->
+  <select id="selectAllCommodityTypeById" parameterType="java.util.Map" resultType="java.util.Map">
+    select
+    t2.id,
+    t2.commodityName,
+    t2.commodityPrice,
+    t2.commodityAddress,
+    t2.commodityCost,
+    t2.typeId,
+    t2.userIphone,
+    t2.userQq,
+    t2.commodityStatus,
+    t2.createData,
+    t2.createBy,
+    t2.updateBate,
+    t2.updateBy,
+    t2.commodityDescribe,
+    t1.typeName
+    FROM commodity_type t1
+    LEFT JOIN commodity t2 ON t2.id in
+    <foreach collection="commodityList" index="index" item="item" open="(" close=")" separator=",">
+      #{item.id}
+    </foreach>
+    where
+    t1.id in
+    <foreach collection="commodityList" index="index" item="item" open="(" close=")" separator=",">
+    #{item.typeId}
+  </foreach>
+  </select>
+
+  <select id="selectAllByWhere" resultType="java.util.Map">
+    select
+    <include refid="Base_Column_List" />
+    from commodity_type
+    where ${where}
+  </select>
+</mapper>

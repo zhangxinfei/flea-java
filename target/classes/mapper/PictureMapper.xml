@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soecode.lyf.mapper.PictureMapper" >
+  <resultMap id="BaseResultMap" type="com.soecode.lyf.entity.Picture" >
+    <result column="ID" property="ID" jdbcType="VARCHAR" />
+    <result column="imgUrl" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="album" property="album" jdbcType="VARCHAR" />
+    <result column="createData" property="createData" jdbcType="VARCHAR" />
+    <result column="createBy" property="createBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.soecode.lyf.entity.Picture" >
+    insert into Picture (ID, imgUrl, album, 
+      createData, createBy)
+    values (#{ID,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{album,jdbcType=VARCHAR}, 
+      #{createData,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soecode.lyf.entity.Picture" >
+    insert into Picture
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ID != null" >
+        ID,
+      </if>
+      <if test="imgUrl != null" >
+        imgUrl,
+      </if>
+      <if test="album != null" >
+        album,
+      </if>
+      <if test="createData != null" >
+        createData,
+      </if>
+      <if test="createBy != null" >
+        createBy,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ID != null" >
+        #{ID,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="album != null" >
+        #{album,jdbcType=VARCHAR},
+      </if>
+      <if test="createData != null" >
+        #{createData,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+  <insert id="insertPictureList" parameterType="java.util.Map">
+    insert into Picture (ID, imgUrl,
+    createData, createBy) values
+    <foreach collection="pictureList" index="index" item="item" open="" close="" separator=",">(
+        #{item.ID},#{item.imgUrl},#{item.createData},#{item.createBy}
+        )
+    </foreach>
+  </insert>
+
+  <select id="selectPictureByWhere" parameterType="java.lang.String" resultType="java.util.Map">
+    select
+    ID, imgUrl, album,
+    createData, createBy
+    from Picture
+    where ${where}
+  </select>
+
+  <delete id="deletePicture" parameterType="java.lang.String">
+     delete from Picture
+    where ID = #{ID,jdbcType=VARCHAR}
+  </delete>
+
+</mapper>

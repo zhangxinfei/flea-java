@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<!-- 配置整合mybatis过程 -->
+	<!-- 1.配置数据库相关参数properties的属性：${url} -->
+	<context:property-placeholder location="classpath:properties/jdbc.properties" />
+
+	<!-- 阿里巴巴 数据源Druid -->
+	<bean class="com.alibaba.druid.pool.DruidDataSource" id="dataSource"
+		  init-method="init" destroy-method="close">
+		 <property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="${druid.initialSize}" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="${druid.maxActive}" />
+		<!-- 连接池最大空闲  maxIdle是Druid为了方便DBCP用户迁移而增加的，maxIdle是一个混乱的概念。连接池只应该有maxPoolSize和minPoolSize，druid只保留了maxActive和minIdle，分别相当于maxPoolSize和minPoolSize -->
+		<!-- 		<property name="maxIdle" value="20" /> -->
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${druid.minIdle}" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="${druid.maxWait}" />
+
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<!-- mysql不支持
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="33" />
+		 -->
+
+		<property name="validationQuery" value="${druid.validationQuery}" />
+		<property name="testOnBorrow" value="${druid.testOnBorrow}" />
+		<property name="testOnReturn" value="${druid.testOnReturn}" />
+		<property name="testWhileIdle" value="${druid.testWhileIdle}" />
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}" />
+
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 1800秒(30分钟) -->
+		<property name="removeAbandonedTimeout" value="1800" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+
+		<!-- 监控数据库 -->
+		<property name="filters" value="${druid.filters}" />
+		<!-- <property name="filters" value="mergeStat" /> -->
+	</bean>
+	<!--&lt;!&ndash; c3p0的数据源 &ndash;&gt;-->
+	<!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
+		<!--&lt;!&ndash; 配置连接池属性 &ndash;&gt;-->
+		<!--<property name="driverClass" value="${jdbc.driver}" />-->
+		<!--<property name="jdbcUrl" value="${jdbc.url}" />-->
+		<!--<property name="user" value="${jdbc.username}" />-->
+		<!--<property name="password" value="${jdbc.password}" />-->
+
+		<!--&lt;!&ndash; c3p0连接池的私有属性 &ndash;&gt;-->
+		<!--<property name="maxPoolSize" value="30" />-->
+		<!--<property name="minPoolSize" value="10" />-->
+		<!--&lt;!&ndash; 关闭连接后不自动commit &ndash;&gt;-->
+		<!--<property name="autoCommitOnClose" value="false" />-->
+		<!--&lt;!&ndash; 获取连接超时时间 &ndash;&gt;-->
+		<!--<property name="checkoutTimeout" value="10000" />-->
+		<!--&lt;!&ndash; 当获取连接失败重试次数 &ndash;&gt;-->
+		<!--<property name="acquireRetryAttempts" value="2" />-->
+
+	<!--</bean>-->
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager"
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 指明使用注解的方式来管理事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+
+
+	<!--1:配置一个JdbcTemplate实例，并将这个“共享的”，“安全的”实例注入到不同的DAO类中去-->
+	<bean id = "jdbcTemplate" class = "org.springframework.jdbc.core.JdbcTemplate">
+		<property name = "dataSource" ref="dataSource"/>
+	</bean>
+
+	<!-- 3.配置SqlSessionFactory对象 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 注入数据库连接池 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 配置MyBaties全局配置文件:mybatis-config.xml -->
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<!-- 扫描entity包 使用别名 -->
+		<property name="typeAliasesPackage" value="com.soecode.lyf.entity" />
+		<!-- 扫描sql配置文件:mapper需要的xml文件 -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml" />
+	</bean>
+
+	<!-- 4.配置扫描Dao接口包，动态实现Dao接口，注入到spring容器中 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 注入sqlSessionFactory -->
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<!-- 给出需要扫描Dao接口包 -->
+		<property name="basePackage" value="com.soecode.lyf.mapper" />
+	</bean>
+
+	<!-- 文件上传 -->
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- set the max upload size 1MB -->
+		<property name="maxUploadSize">
+			<value>304857</value>
+		</property>
+		<!--&lt;!&ndash;&ndash;&gt;-->
+		<!--<property name="maxInMemorySize">-->
+			<!--<value>4096</value>-->
+		<!--</property>-->
+	</bean>
+
+	<!--5.配置事务管理器-->
+	<!--<bean id="transactionManager"-->
+		  <!--class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+		<!--<property name="dataSource" ref="dataSource" />-->
+	<!--</bean>-->
+	<!--6.导入Redis的配置文件,这个是使用aop切面-->
+	<!--<import resource="classpath:spring-redis.xml" ></import>-->
+	<import resource="classpath:spring-redisCluster.xml"></import>
+	<!--7.导入AOP配置文件-->
+	<import resource="classpath:spring-aop.xml"></import>
+
+
+
+</beans>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.soecode.lyf.mapper.UserMapper">
+<resultMap id="BaseResultMap" type="com.soecode.lyf.entity.User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="iphone" jdbcType="INTEGER" property="iphone" />
+    <result column="creatDate" jdbcType="VARCHAR" property="creatDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, username, password, token, email, iphone, creatDate
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.soecode.lyf.entity.User">
+    insert into user (id, username, password, 
+      token, email, iphone, 
+      creatDate)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{token,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{iphone,jdbcType=INTEGER}, 
+      #{creatDate,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soecode.lyf.entity.User">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="iphone != null">
+        iphone,
+      </if>
+      <if test="creatDate != null">
+        creatDate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="iphone != null">
+        #{iphone,jdbcType=INTEGER},
+      </if>
+      <if test="creatDate != null">
+        #{creatDate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soecode.lyf.entity.User">
+    update user
+    <set>
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="iphone != null">
+        iphone = #{iphone,jdbcType=INTEGER},
+      </if>
+      <if test="creatDate != null">
+        creatDate = #{creatDate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soecode.lyf.entity.User">
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      token = #{token,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      iphone = #{iphone,jdbcType=INTEGER},
+      creatDate = #{creatDate,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+  <!--判断用户登录-->
+  <select id="userLogin"  resultType="int" parameterType="com.soecode.lyf.entity.User">
+    select id
+    from user
+    where username = #{username,jdbcType=INTEGER}
+    and password = #{password,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getToken" resultType="com.soecode.lyf.entity.User" parameterType="String">
+    select
+    id, username, token, email, iphone, creatDate
+    from user
+    where token = #{token,jdbcType=INTEGER}
+  </select>
+
+  <select id="userJudge" resultType="int" parameterType="int">
+    select
+    count(0)
+    from user
+    where iphone = #{iphone,jdbcType=INTEGER}
+  </select>
+
+  <insert id="userRegister" parameterType="com.soecode.lyf.entity.User">
+    insert into user (username, password,
+      token, email, iphone,
+      creatDate)
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{token,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{iphone,jdbcType=INTEGER},
+      #{creatDate,jdbcType=VARCHAR})
+  </insert>
+
+  <select id="selectAllByWhere" parameterType="java.lang.String" resultType="java.util.Map">
+    select username,email, iphone,creatDate
+      from user
+      where ${where}
+  </select>
+</mapper>

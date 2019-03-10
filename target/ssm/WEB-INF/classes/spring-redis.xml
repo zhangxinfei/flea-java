@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+
+    <!-- 加载redis-config.properties文件中的内容，redis-config.properties文件中key命名要有一定的特殊规则 -->
+    <!--<context:property-placeholder location="classpath:properties/redis-config.properties" />-->
+    <context:property-placeholder location="classpath:properties/jdbc.properties" />
+
+    <!-- Redis和缓存配置开始 -->
+    <!-- jedis 配置 -->
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}" />
+        <property name="maxTotal" value="${redis.maxTotal}" />
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis}" />
+        <property name="testOnBorrow" value="${redis.testOnBorrow}" />
+    </bean>
+    <!-- redis连接池 -->
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool" destroy-method="close">
+        <constructor-arg name="poolConfig" ref="poolConfig"/>
+        <constructor-arg name="host" value="${redis.host}"/>
+        <constructor-arg name="port" value="${redis.port}"/>
+    </bean>
+    <!-- redis服务器中心 -->
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          destroy-method="destroy">
+        <property name="hostName" value="${redis.hostName}" />
+        <!-- <property name="password" value="${redis.password}" /> -->
+        <property name="port" value="${redis.port}" />
+        <property name="database" value="${redis.default.db}" />
+        <property name="timeout" value="${redis.timeout}" />
+        <property name="poolConfig" ref="poolConfig" />
+        <property name="usePool" value="true" />
+    </bean>
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate" >
+        <property name="connectionFactory" ref="connectionFactory" />
+        <property name="keySerializer" >
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+        </property>
+        <property name="valueSerializer" >
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+        </property>
+    </bean>
+    <!-- cache配置 -->
+    <!--<bean id="putCache" class="com.soecode.lyf.util.redis.cache.PutCacheAOP" >-->
+        <!--<property name="redisTemplate" ref="redisTemplate" />-->
+    <!--</bean>-->
+
+    <!-- cache配置 -->
+    <bean id="getCache" class="com.soecode.lyf.util.redis.cache.GetCacheAOP" >
+        <property name="redisTemplate" ref="redisTemplate" />
+    </bean>
+
+    <!-- Redis和缓存配置结束 -->
+
+</beans>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soecode.lyf.mapper.AdminRoleMapper">
+    <resultMap id="BaseResultMap" type="com.soecode.lyf.entity.AdminRole">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="roleId" property="roleId" jdbcType="INTEGER"/>
+        <result column="adminId" property="adminId" jdbcType="INTEGER"/>
+        <result column="createData" property="createData" jdbcType="VARCHAR"/>
+        <result column="createBy" property="createBy" jdbcType="VARCHAR"/>
+        <result column="updateBate" property="updateBate" jdbcType="VARCHAR"/>
+        <result column="updateBy" property="updateBy" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, roleId, adminId, createData, createBy, updateBate, updateBy
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from admin_role
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from admin_role
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.soecode.lyf.entity.AdminRole">
+    insert into admin_role (id, roleId, adminId, 
+      createData, createBy, updateBate, 
+      updateBy)
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, 
+      #{createData,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{updateBate,jdbcType=VARCHAR}, 
+      #{updateBy,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.soecode.lyf.entity.AdminRole">
+        insert into admin_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="roleId != null">
+                roleId,
+            </if>
+            <if test="adminId != null">
+                adminId,
+            </if>
+            <if test="createData != null">
+                createData,
+            </if>
+            <if test="createBy != null">
+                createBy,
+            </if>
+            <if test="updateBate != null">
+                updateBate,
+            </if>
+            <if test="updateBy != null">
+                updateBy,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="roleId != null">
+                #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="adminId != null">
+                #{adminId,jdbcType=INTEGER},
+            </if>
+            <if test="createData != null">
+                #{createData,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBate != null">
+                #{updateBate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.soecode.lyf.entity.AdminRole">
+        update admin_role
+        <set>
+            <if test="roleId != null">
+                roleId = #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="adminId != null">
+                adminId = #{adminId,jdbcType=INTEGER},
+            </if>
+            <if test="createData != null">
+                createData = #{createData,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                createBy = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBate != null">
+                updateBate = #{updateBate,jdbcType=VARCHAR},
+            </if>
+            <if test="updateBy != null">
+                updateBy = #{updateBy,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.soecode.lyf.entity.AdminRole">
+    update admin_role
+    set roleId = #{roleId,jdbcType=INTEGER},
+      adminId = #{adminId,jdbcType=INTEGER},
+      createData = #{createData,jdbcType=VARCHAR},
+      createBy = #{createBy,jdbcType=VARCHAR},
+      updateBate = #{updateBate,jdbcType=VARCHAR},
+      updateBy = #{updateBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--查询多个管理员的角色ID-->
+    <select id="selectManyIdByadminId" resultType="java.util.Map" parameterType="java.util.Map">
+        select roleId,adminId
+        from admin_role
+        where adminId in
+        <foreach collection="adminList" index="index" item="item" open="(" close=")" separator=",">
+            #{item.id}
+        </foreach>
+    </select>
+
+    <!--新增管理员和id的映射-->
+    <insert id="insertRoleAdmin" parameterType="java.util.Map">
+        insert into admin_role (adminId,roleId)
+        values
+        <foreach collection="roleNameList" index="index" item="item" open="" close="" separator=",">
+            (
+            #{item.adminId},
+            #{item.id}
+            )
+        </foreach>
+    </insert>
+
+    <!--&lt;!&ndash;修改管理员和id的映射&ndash;&gt;-->
+    <!--<insert id="updateRoleAdmin" parameterType="java.util.Map">-->
+    <!--update admin_role set-->
+    <!--roleId in-->
+    <!--<foreach collection="roleNameList" index="index" item="item" open="(" close=")" separator=",">-->
+    <!--#{item.id}-->
+    <!--</foreach>-->
+
+    <!--WHERE adminId in-->
+    <!--<foreach collection="roleNameList" index="index" item="item" open="(" close=")" separator=",">-->
+    <!--#{item.adminId}-->
+    <!--</foreach>-->
+    <!--</insert>-->
+
+
+    <!--修改管理员和id的映射-->
+    <insert id="updateRoleAdmin" parameterType="java.util.Map">
+        <foreach collection="roleNameList" index="index" item="item" open="" close="" separator=";">
+            update admin_role set
+            roleId = #{item.id}
+            WHERE adminId = #{item.adminId}
+        </foreach>
+    </insert>
+
+
+</mapper>

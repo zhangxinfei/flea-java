@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.soecode.lyf.mapper.PermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.soecode.lyf.entity.Permission" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="permissionName" property="permissionName" jdbcType="VARCHAR" />
+    <result column="permission" property="permission" jdbcType="VARCHAR" />
+    <result column="createData" property="createData" jdbcType="VARCHAR" />
+    <result column="createBy" property="createBy" jdbcType="VARCHAR" />
+    <result column="updateData" property="updateData" jdbcType="VARCHAR" />
+    <result column="updateBy" property="updateBy" jdbcType="VARCHAR" />
+    <result column="permissionStatus" property="permissionStatus" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, permissionName, permission, createData, createBy, updateData, updateBy, permissionStatus
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from permission
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from permission
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.soecode.lyf.entity.Permission" >
+    insert into permission (id, permissionName, permission, 
+      createData, createBy, updateData, 
+      updateBy, permissionStatus)
+    values (#{id,jdbcType=INTEGER}, #{permissionName,jdbcType=VARCHAR}, #{permission,jdbcType=VARCHAR}, 
+      #{createData,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{updateData,jdbcType=VARCHAR}, 
+      #{updateBy,jdbcType=VARCHAR}, #{permissionStatus,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.soecode.lyf.entity.Permission" >
+    insert into permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="permissionName != null" >
+        permissionName,
+      </if>
+      <if test="permission != null" >
+        permission,
+      </if>
+      <if test="createData != null" >
+        createData,
+      </if>
+      <if test="createBy != null" >
+        createBy,
+      </if>
+      <if test="updateData != null" >
+        updateData,
+      </if>
+      <if test="updateBy != null" >
+        updateBy,
+      </if>
+      <if test="permissionStatus != null" >
+        permissionStatus,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="permissionName != null" >
+        #{permissionName,jdbcType=VARCHAR},
+      </if>
+      <if test="permission != null" >
+        #{permission,jdbcType=VARCHAR},
+      </if>
+      <if test="createData != null" >
+        #{createData,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateData != null" >
+        #{updateData,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionStatus != null" >
+        #{permissionStatus,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.soecode.lyf.entity.Permission" >
+    update permission
+    <set >
+      <if test="permissionName != null" >
+        permissionName = #{permissionName,jdbcType=VARCHAR},
+      </if>
+      <if test="permission != null" >
+        permission = #{permission,jdbcType=VARCHAR},
+      </if>
+      <if test="createData != null" >
+        createData = #{createData,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        createBy = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateData != null" >
+        updateData = #{updateData,jdbcType=VARCHAR},
+      </if>
+      <if test="updateBy != null" >
+        updateBy = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionStatus != null" >
+        permissionStatus = #{permissionStatus,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.soecode.lyf.entity.Permission" >
+    update permission
+    set permissionName = #{permissionName,jdbcType=VARCHAR},
+      permission = #{permission,jdbcType=VARCHAR},
+      createData = #{createData,jdbcType=VARCHAR},
+      createBy = #{createBy,jdbcType=VARCHAR},
+      updateData = #{updateData,jdbcType=VARCHAR},
+      updateBy = #{updateBy,jdbcType=VARCHAR},
+      permissionStatus = #{permissionStatus,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!--通过权限id查询是否含有此权限-->
+  <select id="selectPermissionById" resultType="java.util.Map" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from permission
+    where
+    id in
+    <foreach collection="permissonIdList" index="index" item="item" open="(" close=")" separator=",">
+      #{item.permissionId}
+    </foreach>
+  </select>
+
+  <!--查看全部权限信息-->
+  <select id="selectALLPermission" resultType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    from permission
+  </select>
+
+  <!--通过权限编码查询id-->
+  <select id="selectPermissionByName" resultType="java.util.Map" parameterType="java.util.Map" >
+    select
+    id
+    from permission
+    where
+    permissionName in
+    <foreach collection="permissionRoleList" index="index" item="item" open="(" close=")" separator=",">
+      #{item.permissionName}
+    </foreach>
+  </select>
+
+</mapper>
